@@ -10,9 +10,9 @@ def limit_vector(v, max_value):
 class Boid:
     def __init__(self, pos):
         self.pos = pos
-        self.vel = (random.uniform(-2, 2), random.uniform(-2, 2))
-        self.acc = (0, 0)
-        self.mass = random.randint(5, 10)
+        self.vel = (random.uniform(-2, 2), random.uniform(-2, 2)) #Velocity
+        self.acc = (0, 0) #Acceleration
+        self.mass = random.randint(5, 10) #Boid's mass
         self.max_force = 6
 
     def update(self):
@@ -30,7 +30,7 @@ class Boid:
         self.pos = (x, y)
         
     def apply_force(self, f):
-        temp = (v[0]/k, v[1]/k) if k != 0 else (v[0], v[1])
+        temp = (f[0]/self.mass, f[1]/self.mass) if self.mass != 0 else (f[0], f[1])
         self.acc = self.acc[0]+temp[0], self.acc[1]+temp[1]
 
     def avoid(self, boids):
