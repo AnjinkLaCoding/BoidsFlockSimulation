@@ -7,7 +7,7 @@ def init():
     obstacle_array = []
     speed_adjustment = 0
 
-    WIDTH, HEIGHT = 800, 400
+    WIDTH, HEIGHT = 1000, 800
     BOID_COUNT = 10
     PREDATOR_COUNT = 2
     OBSTACLE_RADIUS = 60
@@ -18,6 +18,6 @@ def init():
     show_predators = True
     show_obstacle = False
 
-    BG = (255, 249, 240)
+    BG = (200, 220, 255)
     BOID_COLOR = (30, 30, 30)
     PRED_COLOR = (255, 120, 100)
