@@ -1,13 +1,16 @@
 import pygame
 import random
-from GlobalVar import WIDTH, HEIGHT, BOID_COUNT, PREDATOR_COUNT
+from GlobalVar import WIDTH, HEIGHT, BOID_COUNT, PREDATOR_COUNT, BG
 from Domain import OBSTACLE_RADIUS
 from Boids_Agent import Boid
 from Predator import Predator
 
+#---------------------------------------------------
+# This i think should be in globalvar.py
 BG = (200, 220, 255)
 BOID_COLOR = (30, 30, 30)
 PRED_COLOR = (255, 120, 100)
+#---------------------------------------------------
 
 def main():
     pygame.init()
