@@ -1,11 +1,18 @@
 def init():
-    global boids_array, obstacle_array, WIDTH, HEIGHT, FPS
-    #global speed_adjustment
+    # --- CONFIG ---
+    WIDTH, HEIGHT = 800, 400
+    BOID_COUNT = 10
+    PREDATOR_COUNT = 2
+    OBSTACLE_RADIUS = 60
 
-    boids_array = [] #To store the boids object
-    obstacle_array = [] #To store the obstacle objects
-    #speed_adjustment = 0 #To adjust the speed of the boids (if needed just uncomment)
+    # --- FLAGS ---
+    show_flocking = True
+    show_arrows = True
+    show_circles = False
+    show_predators = True
+    show_obstacle = False
 
-    WIDTH = 1500 #Width of the simulation display
-    HEIGHT = 800 #Height of the simulation display
-    FPS = 60 #FPS of the simulation display
+    # --- COLORS ---
+    BG = (255, 249, 240)
+    BOID_COLOR = (30, 30, 30)
+    PRED_COLOR = (255, 120, 100)
