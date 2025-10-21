@@ -1,12 +1,6 @@
 import random
 import math
 
-def limit_vector(v, max_value):
-    mag = math.sqrt(v[0]**2 + v[1]**2)
-    if mag > max_value and mag != 0:
-        return (v[0] / mag * max_value, v[1] / mag * max_value)
-    return v
-
 class Boid:
     def __init__(self, pos):
         self.pos = pos
@@ -14,7 +8,12 @@ class Boid:
         self.acc = (0, 0) #Acceleration
         self.mass = random.randint(5, 10) #Boid's mass
         self.max_force = 6
-
+    def limit_vector(v, max_value):
+        mag = math.sqrt(v[0]**2 + v[1]**2)
+        if mag > max_value and mag != 0:
+            return (v[0] / mag * max_value, v[1] / mag * max_value)
+        return v
+    
     def update(self):
         self.vel = (self.vel[0]+self.acc[0], self.vel[1]+self.acc[1])
         self.vel = limit_vector(self.vel, 5)
@@ -44,7 +43,7 @@ class Boid:
         if count > 0:
             loc_sum = (loc_sum[0]/count, loc_sum[1]/count) if count != 0 else (loc_sum[0], loc_sum[1])
             avoid_vec = (self.pos[0]-loc_sum[0], self.pos[1]-loc_sum[1])
-            avoid_vec = limit_vector(avoid_vec, self.max_force * 2.5)
+            avoid_vec = self.limit_vector(avoid_vec, self.max_force * 2.5)
             self.apply_force(avoid_vec)
 
     def approach(self, boids):
@@ -58,28 +57,28 @@ class Boid:
         if count > 0:
             loc_sum = (loc_sum[0]/count, loc_sum[1]/count) if count != 0 else (loc_sum[0], loc_sum[1])
             approach_vec = (loc_sum[0]-self.pos[0], loc_sum[1]-self.pos[1])
-            approach_vec = limit_vector(approach_vec, self.max_force)
+            approach_vec = self.limit_vector(approach_vec, self.max_force)
             self.apply_force(approach_vec)
-#Below not done
+
     def align(self, boids):
         count = 0
         vel_sum = (0, 0)
         for other in boids:
-            d = dist(self.pos, other.pos)
+            d = math.sqrt((self.pos[0]-other.pos[0])**2 + (self.pos[1]-other.pos[1])**2)
             if 0 < d < self.mass + 100:
-                vel_sum = add(vel_sum, other.vel)
+                vel_sum = (vel_sum[0]+other.vel[0], vel_sum[1]+other.vel[1])
                 count += 1
         if count > 0:
-            vel_sum = div(vel_sum, count)
-            align_vec = limit_vector(vel_sum, self.max_force)
+            vel_sum = (vel_sum[0]/count, vel_sum[1]/count) if count != 0 else (vel_sum[0], vel_sum[1])
+            align_vec = self.limit_vector(vel_sum, self.max_force)
             self.apply_force(align_vec)
 
     def repel(self, point, radius):
-        future_pos = add(self.pos, self.vel)
-        d = dist(point, future_pos)
+        future_pos = (self.pos[0]+self.vel[0], self.pos[1]+self.vel[1])
+        d = math.sqrt((point[0]-future_pos[0])**2 + (point[1]-future_pos[1])**2)
         if d <= radius and d != 0:
-            repel_vec = sub(self.pos, point)
-            repel_vec = limit_vector(repel_vec, self.max_force * 7)
+            repel_vec = (self.pos[0]-point[0], self.pos[1]-point[1])
+            repel_vec = self.limit_vector(repel_vec, self.max_force * 7)
             self.apply_force(repel_vec)
 
     def flock(self, boids):
