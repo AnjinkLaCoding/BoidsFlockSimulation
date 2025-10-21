@@ -1,6 +1,6 @@
 def init():
-    global boids_array, obstacle_array
-    global speed_adjustment, WIDTH, HEIGHT, FPS
+    global boids_array, obstacle_array, WIDTH, HEIGHT, FPS
+    global speed_adjustment
 
     boids_array = []
     obstacle_array = []
