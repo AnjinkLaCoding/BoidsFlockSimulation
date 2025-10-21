@@ -16,9 +16,9 @@ class Boid:
         self.max_force = 6
 
     def update(self):
-        self.vel = self.vel[0]+self.acc[0], self.vel[1]+self.acc[1]
+        self.vel = (self.vel[0]+self.acc[0], self.vel[1]+self.acc[1])
         self.vel = limit_vector(self.vel, 5)
-        self.pos = self.pos[0]+self.vel[0], self.pos[1]+self.vel[1]
+        self.pos = (self.pos[0]+self.vel[0], self.pos[1]+self.vel[1])
         self.acc = (0, 0)
 
         # wrap around screen
@@ -31,19 +31,19 @@ class Boid:
         
     def apply_force(self, f):
         temp = (f[0]/self.mass, f[1]/self.mass) if self.mass != 0 else (f[0], f[1])
-        self.acc = self.acc[0]+temp[0], self.acc[1]+temp[1]
+        self.acc = (self.acc[0]+temp[0], self.acc[1]+temp[1])
 
     def avoid(self, boids):
         count = 0
         loc_sum = (0, 0)
         for other in boids:
-            d = dist(self.pos, other.pos)
+            d = math.sqrt((self.pos[0]-other.pos[0])**2 + (self.pos[1]-other.pos[1])**2)
             if 0 < d < self.mass + 20:
-                loc_sum = add(loc_sum, other.pos)
+                loc_sum = (loc_sum[0]+other.pos[0], loc_sum[1]+other.pos[1])
                 count += 1
         if count > 0:
-            loc_sum = div(loc_sum, count)
-            avoid_vec = sub(self.pos, loc_sum)
+            loc_sum = (loc_sum[0]/count, loc_sum[1]/count) if count != 0 else (loc_sum[0], loc_sum[1])
+            avoid_vec = (self.pos[0]-loc_sum[0], self.pos[1]-loc_sum[1])
             avoid_vec = limit_vector(avoid_vec, self.max_force * 2.5)
             self.apply_force(avoid_vec)
 
