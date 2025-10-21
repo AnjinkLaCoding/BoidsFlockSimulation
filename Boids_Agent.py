@@ -8,6 +8,7 @@ class Boid:
         self.acc = (0, 0) #Acceleration
         self.mass = random.randint(5, 10) #Boid's mass
         self.max_force = 6
+        
     def limit_vector(v, max_value):
         mag = math.sqrt(v[0]**2 + v[1]**2)
         if mag > max_value and mag != 0:
