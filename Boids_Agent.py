@@ -28,9 +28,10 @@ class Boid:
         if y < 0: y = HEIGHT
         elif y > HEIGHT: y = 0
         self.pos = (x, y)
-
+        
     def apply_force(self, f):
-        self.acc = add(self.acc, div(f, self.mass))
+        temp = (v[0]/k, v[1]/k) if k != 0 else (v[0], v[1])
+        self.acc = self.acc[0]+temp[0], self.acc[1]+temp[1]
 
     def avoid(self, boids):
         count = 0
