@@ -1,7 +1,7 @@
 def init():
     global boids_array, obstacle_array, speed_adjustment, WIDTH, HEIGHT, FPS
 
-    agent_array = []
+    boids_array = []
     obstacle_array = []
     speed_adjustment = 0
 
