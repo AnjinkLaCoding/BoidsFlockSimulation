@@ -1,18 +1,23 @@
 def init():
-    # --- CONFIG ---
+    global agent_array, obstacle_array, speed_adjustment, WIDTH, HEIGHT, BOID_COUNT, PREDATOR_COUNT, OBSTACLE_RADIUS
+    global show_arrows, show_flocking, show_circles, show_predators, show_obstacle
+    global BG, BOID_COLOR, PRED_COLOR
+
+    agent_array = []
+    obstacle_array = []
+    speed_adjustment = 0
+
     WIDTH, HEIGHT = 800, 400
     BOID_COUNT = 10
     PREDATOR_COUNT = 2
     OBSTACLE_RADIUS = 60
 
-    # --- FLAGS ---
     show_flocking = True
     show_arrows = True
     show_circles = False
     show_predators = True
     show_obstacle = False
 
-    # --- COLORS ---
     BG = (255, 249, 240)
     BOID_COLOR = (30, 30, 30)
     PRED_COLOR = (255, 120, 100)
