@@ -77,9 +77,9 @@ while running:
         display_screen.blit(font.render(text, True, (50, 20, 40)), (10, 670 + i*20))
 
     display_screen.blit(font.render(f"Number of Boids: {len(boids)}", True, (50, 20, 40)), (10, 10))
-    display_screen.blit(font.render(f"Flocking: {'ON' if show_flocking else 'OFF'}", True, (50, 20, 40)), (10, 30))
-    display_screen.blit(font.render(f"Obstacle: {'ON' if show_obstacle else 'OFF'}", True, (50, 20, 40)), (10, 50))
-    display_screen.blit(font.render(f"Predators: {'ON' if show_predators else 'OFF'}", True, (50, 20, 40)), (10, 70))
+    display_screen.blit(font.render(f"Flocking: {'ON' if GlobalVar.show_flocking else 'OFF'}", True, (50, 20, 40)), (10, 30))
+    display_screen.blit(font.render(f"Obstacle: {'ON' if GlobalVar.show_obstacle else 'OFF'}", True, (50, 20, 40)), (10, 50))
+    display_screen.blit(font.render(f"Predators: {'ON' if GlobalVar.show_predators else 'OFF'}", True, (50, 20, 40)), (10, 70))
     pygame.display.flip()
 
 pygame.quit()
