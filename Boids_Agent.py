@@ -51,16 +51,16 @@ class Boid:
         count = 0
         loc_sum = (0, 0)
         for other in boids:
-            d = dist(self.pos, other.pos)
+            d = math.sqrt((self.pos[0]-other.pos[0])**2 + (self.pos[1]-other.pos[1])**2)
             if 0 < d < self.mass + 60:
-                loc_sum = add(loc_sum, other.pos)
+                loc_sum = (loc_sum[0]+other.pos[0], loc_sum[1]+other.pos[1])
                 count += 1
         if count > 0:
-            loc_sum = div(loc_sum, count)
-            approach_vec = sub(loc_sum, self.pos)
+            loc_sum = (loc_sum[0]/count, loc_sum[1]/count) if count != 0 else (loc_sum[0], loc_sum[1])
+            approach_vec = (loc_sum[0]-self.pos[0], loc_sum[1]-self.pos[1])
             approach_vec = limit_vector(approach_vec, self.max_force)
             self.apply_force(approach_vec)
-
+#Below not done
     def align(self, boids):
         count = 0
         vel_sum = (0, 0)
