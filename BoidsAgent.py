@@ -1,34 +1,36 @@
+import pygame
 import random
 import math
+import GlobalVar
 
 class Boid:
     def __init__(self, pos):
         self.pos = pos
-        self.vel = (random.uniform(-2, 2), random.uniform(-2, 2)) #Velocity
-        self.acc = (0, 0) #Acceleration
-        self.mass = random.randint(5, 10) #Boid's mass
+        self.vel = (random.uniform(-2, 2), random.uniform(-2, 2))
+        self.acc = (0, 0)
+        self.mass = random.randint(5, 10)
         self.max_force = 6
-        
-    def limit_vector(v, max_value):
+
+    def limit_vector(self, v, max_value):
         mag = math.sqrt(v[0]**2 + v[1]**2)
         if mag > max_value and mag != 0:
             return (v[0] / mag * max_value, v[1] / mag * max_value)
         return v
-    
+
     def update(self):
         self.vel = (self.vel[0]+self.acc[0], self.vel[1]+self.acc[1])
-        self.vel = limit_vector(self.vel, 5)
+        self.vel = self.limit_vector(self.vel, 5)
         self.pos = (self.pos[0]+self.vel[0], self.pos[1]+self.vel[1])
         self.acc = (0, 0)
 
         # wrap around screen
         x, y = self.pos
-        if x < 0: x = WIDTH
-        elif x > WIDTH: x = 0
-        if y < 0: y = HEIGHT
-        elif y > HEIGHT: y = 0
+        if x < 0: x = GlobalVar.WIDTH
+        elif x > GlobalVar.WIDTH: x = 0
+        if y < 0: y = GlobalVar.HEIGHT
+        elif y > GlobalVar.HEIGHT: y = 0
         self.pos = (x, y)
-        
+
     def apply_force(self, f):
         temp = (f[0]/self.mass, f[1]/self.mass) if self.mass != 0 else (f[0], f[1])
         self.acc = (self.acc[0]+temp[0], self.acc[1]+temp[1])
@@ -88,8 +90,8 @@ class Boid:
         self.align(boids)
 
     def draw(self, screen):
-        if show_circles:
-            pygame.draw.circle(screen, BOID_COLOR, (int(self.pos[0]), int(self.pos[1])), self.mass, 1)
-        if show_arrows:
+        if GlobalVar.show_circles:
+            pygame.draw.circle(screen, GlobalVar.BOID_COLOR, (int(self.pos[0]), int(self.pos[1])), self.mass, 1)
+        if GlobalVar.show_arrows:
             end = (self.pos[0] + self.vel[0]*3, self.pos[1] + self.vel[1]*3)
-            pygame.draw.line(screen, BOID_COLOR, self.pos, end, 1)
+            pygame.draw.line(screen, GlobalVar.BOID_COLOR, self.pos, end, 1)
