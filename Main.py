@@ -9,7 +9,7 @@ GlobalVar.init()
 
 # --- INITIALIZE ---
 pygame.init()
-screen = pygame.display.set_mode((GlobalVar.WIDTH, GlobalVar.HEIGHT))
+display_screen = pygame.display.set_mode((GlobalVar.WIDTH, GlobalVar.HEIGHT))
 clock = pygame.time.Clock()
 
 boids = [Boid((random.uniform(0, GlobalVar.WIDTH), random.uniform(0, GlobalVar.HEIGHT))) for _ in range(GlobalVar.BOID_COUNT)]
@@ -34,11 +34,11 @@ while running:
             if event.key == pygame.K_c: GlobalVar.show_circles = not GlobalVar.show_circles
 
     # background
-    screen.fill(GlobalVar.BG)
+    display_screen.fill(GlobalVar.BG)
 
     mouse_pos = pygame.mouse.get_pos()
     if GlobalVar.show_obstacle:
-        pygame.draw.circle(screen, (100, 50, 50), mouse_pos, GlobalVar.OBSTACLE_RADIUS, 1)
+        pygame.draw.circle(display_screen, (100, 50, 50), mouse_pos, GlobalVar.OBSTACLE_RADIUS, 1)
 
     # update boids
     for b in boids:
@@ -50,7 +50,7 @@ while running:
         if GlobalVar.show_flocking:
             b.flock(boids)
         b.update()
-        b.draw(screen)
+        b.draw(display_screen)
 
     # update predators
     if GlobalVar.show_predators:
@@ -61,23 +61,25 @@ while running:
                     if other is not p:
                         p.repel(other.pos, 30)
             p.update()
-            p.draw(screen)
+            p.draw(display_screen)
 
     # draw text
-    font = pygame.font.SysFont("monospace", 14)
-    legend = [
+    font = pygame.font.SysFont("comic sans ms", 18)
+    help_text = [
         "Flocking: f",
-        "Predator: p",
         "Obstacle: o",
+        "Predator: p",
         "Arrows: a",
         "Circles: c",
         "Add Boid: click"
     ]
-    for i, text in enumerate(legend):
-        screen.blit(font.render(text, True, (50, 20, 40)), (10, 10 + i*15))
+    for i, text in enumerate(help_text):
+        display_screen.blit(font.render(text, True, (50, 20, 40)), (10, 670 + i*20))
 
-    screen.blit(font.render(f"Boids: {len(boids)}", True, (50, 20, 40)), (10, 110))
-
+    display_screen.blit(font.render(f"Number of Boids: {len(boids)}", True, (50, 20, 40)), (10, 10))
+    display_screen.blit(font.render(f"Flocking: {'ON' if show_flocking else 'OFF'}", True, (50, 20, 40)), (10, 30))
+    display_screen.blit(font.render(f"Obstacle: {'ON' if show_obstacle else 'OFF'}", True, (50, 20, 40)), (10, 50))
+    display_screen.blit(font.render(f"Predators: {'ON' if show_predators else 'OFF'}", True, (50, 20, 40)), (10, 70))
     pygame.display.flip()
 
 pygame.quit()
