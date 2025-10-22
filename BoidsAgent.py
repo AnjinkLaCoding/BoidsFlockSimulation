@@ -15,7 +15,7 @@ class Boid:
         self.mass = random.randint(5, 10)
         self.max_force = 6
 
-    #To keep velocity vectors on the limit, so their movement more controlled
+    #Keeps vectors like steering force or velocity from getting too large (Keep their movement in controlled manner)
     def limit_vector(self, v, max_value):
         mag = math.sqrt(v[0]**2 + v[1]**2)
         if mag > max_value and mag != 0:
