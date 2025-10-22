@@ -6,7 +6,7 @@ from PredatorAgent import Predator
 
 GlobalVar.init()
 
-# --- INITIALIZE ---
+#Initialize
 pygame.init()
 display_screen = pygame.display.set_mode((GlobalVar.WIDTH, GlobalVar.HEIGHT))
 clock = pygame.time.Clock()
@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 boids = [Boid((random.uniform(0, GlobalVar.WIDTH), random.uniform(0, GlobalVar.HEIGHT))) for _ in range(GlobalVar.BOID_COUNT)]
 preds = [Predator((random.uniform(0, GlobalVar.WIDTH), random.uniform(0, GlobalVar.HEIGHT))) for _ in range(GlobalVar.PREDATOR_COUNT)]
 
-# --- MAIN LOOP ---
+#Main loop
 running = True
 frame = 0
 while running:
@@ -23,8 +23,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        #When user click the mouse
         elif event.type == pygame.MOUSEBUTTONDOWN:
             boids.append(Boid(pygame.mouse.get_pos()))
+        #If user press a key
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f: GlobalVar.show_flocking = not GlobalVar.show_flocking
             if event.key == pygame.K_p: GlobalVar.show_predators = not GlobalVar.show_predators
@@ -45,7 +47,6 @@ while running:
     # background
     display_screen.fill(GlobalVar.BG)
 
-    #mouse_pos = pygame.mouse.get_pos()
     if GlobalVar.show_obstacle and GlobalVar.obstacle_pos:
         pygame.draw.circle(display_screen, (255, 255, 255), GlobalVar.obstacle_pos, GlobalVar.OBSTACLE_RADIUS)
 
