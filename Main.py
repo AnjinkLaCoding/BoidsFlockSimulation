@@ -1,6 +1,5 @@
 import pygame
 import random
-import math
 import GlobalVar
 from BoidsAgent import Boid
 from PredatorAgent import Predator
@@ -29,16 +28,26 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f: GlobalVar.show_flocking = not GlobalVar.show_flocking
             if event.key == pygame.K_p: GlobalVar.show_predators = not GlobalVar.show_predators
-            if event.key == pygame.K_o: GlobalVar.show_obstacle = not GlobalVar.show_obstacle
+            if event.key == pygame.K_o: 
+                GlobalVar.show_obstacle = not GlobalVar.show_obstacle
+                if GlobalVar.show_obstacle:
+                    # Set random obstacle position when turning ON
+                    GlobalVar.obstacle_pos = (
+                        random.randint(GlobalVar.OBSTACLE_RADIUS, GlobalVar.WIDTH - GlobalVar.OBSTACLE_RADIUS),
+                        random.randint(GlobalVar.OBSTACLE_RADIUS, GlobalVar.HEIGHT - GlobalVar.OBSTACLE_RADIUS)
+                    )
+                else:
+                    # Clear obstacle when turning OFF
+                    GlobalVar.obstacle_pos = None
             if event.key == pygame.K_a: GlobalVar.show_arrows = not GlobalVar.show_arrows
             if event.key == pygame.K_c: GlobalVar.show_circles = not GlobalVar.show_circles
 
     # background
     display_screen.fill(GlobalVar.BG)
 
-    mouse_pos = pygame.mouse.get_pos()
-    if GlobalVar.show_obstacle:
-        pygame.draw.circle(display_screen, (100, 50, 50), mouse_pos, GlobalVar.OBSTACLE_RADIUS, 1)
+    #mouse_pos = pygame.mouse.get_pos()
+    if GlobalVar.show_obstacle and GlobalVar.obstacle_pos:
+        pygame.draw.circle(display_screen, (255, 255, 255), GlobalVar.obstacle_pos, GlobalVar.OBSTACLE_RADIUS)
 
     # update boids
     for b in boids:
@@ -46,7 +55,7 @@ while running:
             for p in preds:
                 b.repel(p.pos, GlobalVar.OBSTACLE_RADIUS)
         if GlobalVar.show_obstacle:
-            b.repel(mouse_pos, GlobalVar.OBSTACLE_RADIUS)
+            b.repel(GlobalVar.obstacle_pos, GlobalVar.OBSTACLE_RADIUS)
         if GlobalVar.show_flocking:
             b.flock(boids)
         b.update()
@@ -60,6 +69,8 @@ while running:
                 for other in preds:
                     if other is not p:
                         p.repel(other.pos, 30)
+            if GlobalVar.show_obstacle and GlobalVar.obstacle_pos:
+                p.repel(GlobalVar.obstacle_pos, GlobalVar.OBSTACLE_RADIUS)
             p.update()
             p.draw(display_screen)
 
