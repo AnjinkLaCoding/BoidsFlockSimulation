@@ -5,18 +5,24 @@ import GlobalVar
 
 class Boid:
     def __init__(self, pos):
+        #Boids position
         self.pos = pos
+        #Boids velocity
         self.vel = (random.uniform(-2, 2), random.uniform(-2, 2))
+        #Boids acceleration
         self.acc = (0, 0)
+        #Boids mass (Determined its size)
         self.mass = random.randint(5, 10)
         self.max_force = 6
 
+    #To keep velocity vectors on the limit, so their movement more controlled
     def limit_vector(self, v, max_value):
         mag = math.sqrt(v[0]**2 + v[1]**2)
         if mag > max_value and mag != 0:
             return (v[0] / mag * max_value, v[1] / mag * max_value)
         return v
 
+    #updating boids
     def update(self):
         self.vel = (self.vel[0]+self.acc[0], self.vel[1]+self.acc[1])
         self.vel = self.limit_vector(self.vel, 5)
@@ -31,11 +37,13 @@ class Boid:
         elif y > GlobalVar.HEIGHT: y = 0
         self.pos = (x, y)
 
+    #Applies steering force (more massive boids respond more slowly)
     def apply_force(self, f):
         temp = (f[0]/self.mass, f[1]/self.mass) if self.mass != 0 else (f[0], f[1])
         self.acc = (self.acc[0]+temp[0], self.acc[1]+temp[1])
 
-    def avoid(self, boids):
+    #Implement the separation part (Steers away from nearby boids to avoid crowding or collisions)
+    def separate(self, boids):
         count = 0
         loc_sum = (0, 0)
         for other in boids:
@@ -49,7 +57,8 @@ class Boid:
             avoid_vec = self.limit_vector(avoid_vec, self.max_force * 2.5)
             self.apply_force(avoid_vec)
 
-    def approach(self, boids):
+    #Implement the cohesion part (Steers toward the average position of nearby boids (flock center))
+    def cohesion(self, boids):
         count = 0
         loc_sum = (0, 0)
         for other in boids:
@@ -63,6 +72,7 @@ class Boid:
             approach_vec = self.limit_vector(approach_vec, self.max_force)
             self.apply_force(approach_vec)
 
+    #Implement the alignment part (Steers to match the average velocity (direction) of nearby boids)
     def align(self, boids):
         count = 0
         vel_sum = (0, 0)
@@ -76,6 +86,7 @@ class Boid:
             align_vec = self.limit_vector(vel_sum, self.max_force)
             self.apply_force(align_vec)
 
+    #To avoid obstacles or predators
     def repel(self, point, radius):
         future_pos = (self.pos[0]+self.vel[0], self.pos[1]+self.vel[1])
         d = math.sqrt((point[0]-future_pos[0])**2 + (point[1]-future_pos[1])**2)
@@ -84,11 +95,13 @@ class Boid:
             repel_vec = self.limit_vector(repel_vec, self.max_force * 7)
             self.apply_force(repel_vec)
 
+    #To implement the flock
     def flock(self, boids):
-        self.avoid(boids)
-        self.approach(boids)
+        self.separate(boids)
+        self.cohesion(boids)
         self.align(boids)
 
+    #To draw into the display
     def draw(self, screen):
         if GlobalVar.show_circles:
             pygame.draw.circle(screen, GlobalVar.BOID_COLOR, (int(self.pos[0]), int(self.pos[1])), self.mass, 1)
